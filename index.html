@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script src="https://unpkg.com/vue-onsenui@2.6.2/dist/vue-onsenui.js"></script>
+<title></title>
+</head>
+<body>
+
+  <template id="main-page">
+    <v-ons-page>
+      <v-ons-toolbar>
+        <div class="center">ツイート検索</div>
+      </v-ons-toolbar>
+
+      <v-ons-list>
+        <v-ons-list-header>ワード</v-ons-list-header>
+        <v-ons-list-item modifier="nodivider" v-for="(n, index) in wordNumber" :key="n">
+          <v-ons-search-input style="width: 90%" placeholder="検索ワードを入力 " v-model="wordList[index]"></v-ons-search-input>
+        </v-ons-list-item>
+
+        <v-ons-list-item modifier="nodivider">
+          <v-ons-button modifier="cta"  @click="addWord">ワードを追加</v-ons-button>
+        </v-ons-list-item>
+
+        <v-ons-list-header>期間</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="center">
+            <v-ons-select style="width: 100%" v-model="selectedPeriod">
+              <option v-for="period in periodList" :value="period.value">
+                {{ period.text }}
+              </option>
+            </v-ons-select>
+          </div>
+        </v-ons-list-item>
+        <template v-if="periodIsCustomize">
+          <v-ons-list-item>
+            <div class="center">
+              <v-ons-input type="date" float v-model="period.from"></v-ons-input>～
+              <v-ons-input type="date" float v-model="period.to"></v-ons-input>
+            </div>
+          </v-ons-list-item>
+        </template>
+
+        <v-ons-list-header>アカウント</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="center">
+            <v-ons-select style="width: 100%" v-model="selectedAccount">
+              <option v-for="a in account" :value="a.value">
+                {{ a.text }}
+              </option>
+            </v-ons-select>
+          </div>
+        </v-ons-list-item>
+        <template v-if="needsAccountName">
+          <v-ons-list-item>
+            <div class="center">
+              <v-ons-input v-model="accountText" float　placeholder="アカウント名を入力"></v-ons-input>
+            </div>
+          </v-ons-list-item>
+        </template>
+
+        <v-ons-list-header>メディア</v-ons-list-header>
+        <v-ons-list-item v-for="(m, $index) in media" :key="m.id" tappable>
+          <label class="left">
+            <v-ons-checkbox :input-id="'checkbox-' + $index" :value="m.value" v-model="checkedMedia"></v-ons-checkbox>
+          </label>
+          <label class="center" :for="'checkbox-' + $index">
+            {{ m.text }}
+          </label>
+        </v-ons-list-item>
+
+        <v-ons-list-header>言語</v-ons-list-header>
+        <v-ons-list-item v-for="(l, $index) in language" :key="l.id" tappable>
+          <label class="left">
+            <v-ons-radio :input-id="'radio-' + $index" :value="l.value" v-model="checkedLanguage"></v-ons-radio>
+          </label>
+          <label class="center" :for="'radio-' + $index">
+            {{ l.text }}
+          </label>
+        </v-ons-list-item>
+
+        <v-ons-list-header>リツイート数</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="center">
+            <v-ons-select style="width: 100%" v-model="retweet">
+              <option v-for="n in number" :value="n.value">
+                {{ n.text }}
+              </option>
+            </v-ons-select>
+          </div>
+        </v-ons-list-item>
+
+        <v-ons-list-header>いいね数</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="center">
+            <v-ons-select style="width: 100%" v-model="favorite">
+              <option v-for="n in number" :value="n.value">
+                {{ n.text }}
+              </option>
+            </v-ons-select>
+          </div>
+        </v-ons-list-item>
+
+        <v-ons-list-header>リプライ数</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="center">
+            <v-ons-select style="width: 100%" v-model="reply">
+              <option v-for="n in number" :value="n.value">
+                {{ n.text }}
+              </option>
+            </v-ons-select>
+          </div>
+        </v-ons-list-item>
+      </v-ons-list>
+
+      <p style="text-align: center">
+        <v-ons-button modifier="large" style="margin: 6px 0" @click="search">検索</v-ons-button>
+      </p>
+
+      <p style="text-align: center">
+        <v-ons-button modifier="large outline" style="margin: 6px 0" @click="resetData">リセット</v-ons-button>
+      </p>
+    </v-ons-page>
+  </template>
+
+  <div id="app"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
